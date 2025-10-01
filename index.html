@@ -29,7 +29,7 @@
       padding:12px;
     }
 
-    /* Header */
+    
     header{
       width:100%;
       max-width:var(--max-width);
@@ -43,7 +43,7 @@
     }
     header .title{font-weight:800;color:var(--mcc-blue);font-size:15px;line-height:1.1}
 
-    /* Main card */
+    
     .wrap{width:100%;max-width:var(--max-width)}
     .card{
       background:var(--card-bg);
@@ -62,13 +62,13 @@
     td{background:#fff;font-size:15px}
     .highlight{color:var(--accent);font-weight:900}
 
-    /* Button row */
+    
     .btn-row{display:flex;gap:10px;align-items:center;justify-content:center;margin-top:14px}
     .btn{background:var(--mcc-blue);color:#fff;padding:12px 16px;border-radius:10px;border:0;cursor:pointer;font-weight:900;font-size:15px;min-width:220px;box-shadow:0 10px 26px rgba(11,59,102,0.12)}
     .btn:active{transform:translateY(1px)}
     footer{width:100%;max-width:var(--max-width);text-align:center;margin-top:12px;color:#556;font-size:12px;padding:4px}
 
-    /* overlay spectacle (mobile friendly) */
+    
     #overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:9999;background:radial-gradient(circle at 50% 30%, rgba(0,0,0,0.22), rgba(0,0,0,0.75));backdrop-filter: blur(4px)}
     .surp-card{position:relative;width:94%;max-width:980px;border-radius:14px;padding:18px;background:linear-gradient(180deg,#fff,#f8feff);box-shadow:0 28px 60px rgba(5,20,40,0.6);text-align:center;margin:auto;overflow:hidden}
     .gold-badge{width:120px;height:120px;border-radius:50%;margin:4px auto;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 25% 25%, #fff7d6,#ffd56a 60%,#c58a00 100%);border:7px solid rgba(255,255,255,0.65);box-shadow:0 14px 36px rgba(200,140,20,0.2)}
@@ -78,14 +78,14 @@
     .controls{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
     .ghost{background:transparent;border:2px solid rgba(11,59,102,0.1);color:var(--mcc-blue);padding:8px 12px;border-radius:10px;cursor:pointer;font-weight:800}
 
-    /* balloon style */
+    
     .balloon{position:absolute;bottom:-160px;border-radius:50%;opacity:0.98;z-index:6}
     .string{position:absolute;left:50%;transform:translateX(-50%);width:2px;background:rgba(0,0,0,0.08);height:56px;bottom:-8px;border-radius:2px}
 
-    /* canvas layers */
+    
     canvas{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none}
 
-    /* responsive tweaks */
+    
     @media (max-width:420px){
       header{padding:10px}
       .gold-badge{width:100px;height:100px}
@@ -126,7 +126,7 @@
 
   <footer>MADE by me</footer>
 
-  <!-- Overlay spectacle -->
+  
   <div id="overlay" aria-hidden="true">
     <div class="surp-card" role="dialog" aria-modal="true" aria-label="Celebration">
       <canvas id="confettiCanvas"></canvas>
@@ -158,7 +158,7 @@
 
   <script>
   (function(){
-    // Elements
+    
     const magicBtn = document.getElementById('magicBtn');
     const overlay = document.getElementById('overlay');
     const typed = document.getElementById('typedMessage');
@@ -175,7 +175,7 @@
     let fireRAF = null;
     let balloonInterval = null;
 
-    // mobile-friendly canvas sizing (devicePixelRatio aware)
+    
     function fitCanvas(canvas){
       const rect = canvas.getBoundingClientRect();
       const dpr = window.devicePixelRatio || 1;
@@ -187,18 +187,18 @@
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
-    // show overlay and start spectacle
+    
     magicBtn.addEventListener('click', () => {
       overlay.style.display = 'flex';
       overlay.setAttribute('aria-hidden','false');
 
-      // small visual entrance
+      
       const card = overlay.querySelector('.surp-card');
       card.style.transform = 'scale(.92)';
       card.style.opacity = '0';
       setTimeout(()=>{ card.style.transition = 'transform 380ms cubic-bezier(.2,.9,.18,1), opacity 320ms'; card.style.transform = 'scale(1)'; card.style.opacity = '1'; }, 16);
 
-      // allow paint then start
+      
       setTimeout(()=> {
         animateBadge();
         runTypedMessages();
@@ -209,7 +209,7 @@
       }, 90);
     });
 
-    // close and replay handlers
+    
     closeBtn.addEventListener('click', hideAll);
     replayBtn.addEventListener('click', ()=> {
       stopAll();
@@ -237,7 +237,7 @@
       stopConfetti(); stopFireworks(); stopBalloons(); stopAudio();
     }
 
-    // ---------- TYPED MESSAGES ----------
+    
     function runTypedMessages(){
       const msgs = [
         "Provisional allotment confirmed — your dream is one step closer! ✨",
@@ -262,7 +262,7 @@
       }, speed);
     }
 
-    // ---------- GOLD BADGE ----------
+    
     function animateBadge(){
       goldBadge.style.opacity = '0';
       goldBadge.style.transform = 'translateY(18px) scale(.9)';
@@ -274,7 +274,7 @@
       },20);
     }
 
-    // ---------- BALLOONS ----------
+    
     function spawnBalloons(){
       stopBalloons();
       const colors = ['#FF6B8A','#7CE3E1','#FFD166','#A7F3D0','#BDA0FF','#FFCF86'];
@@ -303,7 +303,7 @@
     }
     function stopBalloons(){ if(balloonInterval) clearInterval(balloonInterval); balloonInterval = null; balloonsContainer.innerHTML = ''; }
 
-    // ---------- CONFETTI ----------
+    
     function startConfetti(canvas){
       stopConfetti();
       fitCanvas(canvas);
@@ -347,7 +347,7 @@
     }
     function stopConfetti(){ if(confettiRAF) cancelAnimationFrame(confettiRAF); try{ const ctx = confCanvas.getContext('2d'); ctx.clearRect(0,0,confCanvas.width, confCanvas.height); }catch(e){} }
 
-    // ---------- FIREWORKS ----------
+    
     function startFireworks(canvas){
       stopFireworks();
       fitCanvas(canvas);
@@ -392,7 +392,7 @@
     }
     function stopFireworks(){ if(fireRAF) cancelAnimationFrame(fireRAF); try{ const ctx = fireCanvas.getContext('2d'); ctx.clearRect(0,0,fireCanvas.width, fireCanvas.height); }catch(e){} }
 
-    // ---------- AUDIO (short celebratory) ----------
+    
     function playAudioAndBeat(){
       try{
         if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -410,13 +410,13 @@
           g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.18);
           o.stop(t0 + 0.22);
         });
-        // gentle pad
+        
         const pad = audioCtx.createOscillator();
         const gPad = audioCtx.createGain();
         pad.type = 'triangle'; pad.frequency.value = 130.81;
         gPad.gain.value = 0.0001; pad.connect(gPad); gPad.connect(audioCtx.destination);
         pad.start(now + 0.04); gPad.gain.exponentialRampToValueAtTime(0.06, now + 0.12); gPad.gain.exponentialRampToValueAtTime(0.0001, now + 3.6); pad.stop(now + 3.6);
-        // soft swell/kick
+        
         const bufferSize = audioCtx.sampleRate * 0.22;
         const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
         const data = noiseBuffer.getChannelData(0);
@@ -431,7 +431,7 @@
     }
     function stopAudio(){ try{ if(audioCtx){ audioCtx.close(); audioCtx = null; } }catch(e){} }
 
-    // ---------- utilities ----------
+    
     function fitCanvas(canvas){
       try{
         const rect = canvas.getBoundingClientRect();
@@ -445,7 +445,7 @@
       }catch(e){}
     }
 
-    // ---------- cleanup ----------
+    
     function stopConfetti(){ if(confettiRAF) cancelAnimationFrame(confettiRAF); try{ const ctx = confCanvas.getContext('2d'); ctx.clearRect(0,0,confCanvas.width, confCanvas.height); }catch(e){} }
     function stopFireworks(){ if(fireRAF) cancelAnimationFrame(fireRAF); try{ const ctx = fireCanvas.getContext('2d'); ctx.clearRect(0,0,fireCanvas.width, fireCanvas.height); }catch(e){} }
     function stopBalloons(){ if(balloonInterval) clearInterval(balloonInterval); balloonInterval = null; balloonsContainer.innerHTML = ''; }
@@ -456,6 +456,7 @@
   </script>
 </body>
 </html>
+
 
 
 
