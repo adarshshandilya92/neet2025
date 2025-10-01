@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Mock MCC — Provisional Allotment (Round 3)</title>
+  <style>
+    :root{
+      --mcc-blue:#0b3b66;
+      --accent:#007a33;
+      --muted:#6b7280;
+      --card-bg:#fff;
+      --glass: rgba(255,255,255,0.6);
+      --max-width:980px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg,#f4f8fc,#eef6ff);
+      color:#102129;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      padding:12px;
+    }
+
+    /* Header */
+    header{
+      width:100%;
+      max-width:var(--max-width);
+      background:var(--card-bg);
+      border-bottom:3px solid var(--mcc-blue);
+      padding:12px 14px;
+      border-radius:10px;
+      box-shadow:0 6px 18px rgba(11,59,102,0.04);
+      text-align:center;
+      margin-bottom:12px;
+    }
+    header .title{font-weight:800;color:var(--mcc-blue);font-size:15px;line-height:1.1}
+
+    /* Main card */
+    .wrap{width:100%;max-width:var(--max-width)}
+    .card{
+      background:var(--card-bg);
+      border:1px solid rgba(0,0,0,0.06);
+      padding:14px;
+      border-radius:12px;
+      box-shadow:0 12px 36px rgba(6,18,40,0.06);
+      overflow:hidden;
+    }
+    h1{margin:6px 0;color:var(--mcc-blue);text-align:center;font-size:20px}
+    p.lead{text-align:center;color:var(--muted);margin:6px 0 12px;font-size:13px}
+
+    table{width:100%;border-collapse:collapse;font-size:15px;margin-top:6px}
+    th,td{padding:12px;border:1px solid #e6edf5;text-align:left;vertical-align:middle}
+    th{background:linear-gradient(180deg,#f3f9ff,#eef6ff);width:36%;font-weight:800;color:#123a51;font-size:14px}
+    td{background:#fff;font-size:15px}
+    .highlight{color:var(--accent);font-weight:900}
+
+    /* Button row */
+    .btn-row{display:flex;gap:10px;align-items:center;justify-content:center;margin-top:14px}
+    .btn{background:var(--mcc-blue);color:#fff;padding:12px 16px;border-radius:10px;border:0;cursor:pointer;font-weight:900;font-size:15px;min-width:220px;box-shadow:0 10px 26px rgba(11,59,102,0.12)}
+    .btn:active{transform:translateY(1px)}
+    footer{width:100%;max-width:var(--max-width);text-align:center;margin-top:12px;color:#556;font-size:12px;padding:4px}
+
+    /* overlay spectacle (mobile friendly) */
+    #overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:9999;background:radial-gradient(circle at 50% 30%, rgba(0,0,0,0.22), rgba(0,0,0,0.75));backdrop-filter: blur(4px)}
+    .surp-card{position:relative;width:94%;max-width:980px;border-radius:14px;padding:18px;background:linear-gradient(180deg,#fff,#f8feff);box-shadow:0 28px 60px rgba(5,20,40,0.6);text-align:center;margin:auto;overflow:hidden}
+    .gold-badge{width:120px;height:120px;border-radius:50%;margin:4px auto;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 25% 25%, #fff7d6,#ffd56a 60%,#c58a00 100%);border:7px solid rgba(255,255,255,0.65);box-shadow:0 14px 36px rgba(200,140,20,0.2)}
+    .surp-title{font-size:22px;color:var(--mcc-blue);font-weight:900;margin-top:8px}
+    .surp-sub{font-size:14px;color:#0b3b66;font-weight:800;margin-top:6px}
+    .typed{color:var(--accent);font-weight:800;font-size:16px;min-height:46px;margin-top:10px;line-height:1.3}
+    .controls{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+    .ghost{background:transparent;border:2px solid rgba(11,59,102,0.1);color:var(--mcc-blue);padding:8px 12px;border-radius:10px;cursor:pointer;font-weight:800}
+
+    /* balloon style */
+    .balloon{position:absolute;bottom:-160px;border-radius:50%;opacity:0.98;z-index:6}
+    .string{position:absolute;left:50%;transform:translateX(-50%);width:2px;background:rgba(0,0,0,0.08);height:56px;bottom:-8px;border-radius:2px}
+
+    /* canvas layers */
+    canvas{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none}
+
+    /* responsive tweaks */
+    @media (max-width:420px){
+      header{padding:10px}
+      .gold-badge{width:100px;height:100px}
+      .surp-title{font-size:18px}
+      .typed{font-size:14px}
+      .btn{min-width:170px;padding:10px 12px;font-size:14px}
+      th,td{padding:10px;font-size:14px}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="title">Medical Counselling Committee (MCC), DGHS — NEET UG Counselling 2025</div>
+  </header>
+
+  <main class="wrap">
+    <section class="card" aria-labelledby="main-heading">
+      <h1 id="main-heading">Provisional Seat Allotment Result — Round 3</h1>
+      <p class="lead">A motivational mock-up — tap the big button for a surprise celebration!</p>
+
+      <table role="table">
+        <tr><th>Roll Number</th><td>2025XXXXXX</td></tr>
+        <tr><th>Candidate Name</th><td>Riddhi Rupasi</td></tr>
+        <tr><th>Date of Birth</th><td>17th Feb</td></tr>
+        <tr><th>Category</th><td>General</td></tr>
+        <tr><th>All India Rank</th><td class="highlight">30,1XX</td></tr>
+        <tr><th>Allotted Institute</th><td class="highlight">GOVERNMENT MEDICAL COLLEGE</td></tr>
+        <tr><th>Quota</th><td>All India Quota (15%)</td></tr>
+        <tr><th>Round</th><td>Round 3</td></tr>
+        <tr><th>Counsellor</th><td>Adarsh Shandilya</td></tr>
+      </table>
+
+      <div class="btn-row" aria-hidden="false">
+        <button id="magicBtn" class="btn" aria-label="Click for surprise">CLICK TO DOWNLOAD ALLOTMENT LETTER</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>MADE by me</footer>
+
+  <!-- Overlay spectacle -->
+  <div id="overlay" aria-hidden="true">
+    <div class="surp-card" role="dialog" aria-modal="true" aria-label="Celebration">
+      <canvas id="confettiCanvas"></canvas>
+      <canvas id="fireCanvas" style="z-index:2"></canvas>
+
+      <div id="balloonsContainer" aria-hidden="true" style="position:relative;z-index:6"></div>
+
+      <div class="gold-badge" id="goldBadge" aria-hidden="true" style="opacity:0;transform:translateY(16px) scale(.9)">
+        <svg viewBox="0 0 100 100" width="80" height="80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs><linearGradient id="lg" x1="0" x2="1"><stop offset="0" stop-color="#fff3c9"/><stop offset="1" stop-color="#ffd07a"/></linearGradient></defs>
+          <circle cx="50" cy="50" r="44" fill="url(#lg)" stroke="#d6a84a" stroke-width="3"/>
+          <text x="50" y="52" text-anchor="middle" font-size="10" font-weight="900" fill="#5b3a01">GOVT.</text>
+          <text x="50" y="67" text-anchor="middle" font-size="7.5" font-weight="800" fill="#5b3a01">MEDICAL COLLEGE</text>
+        </svg>
+      </div>
+
+      <div class="surp-title">Congratulations, Riddhi!</div>
+      <div class="surp-sub">GOVERNMENT MEDICAL COLLEGE — MBBS (Provisional)</div>
+
+      <div class="typed" id="typedMessage" aria-live="polite"></div>
+
+      <div class="controls">
+        <button id="replayBtn" class="btn">Replay Surprise</button>
+        <button id="screenshotTip" class="ghost">How to Capture</button>
+        <button id="closeBtn" class="ghost">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    // Elements
+    const magicBtn = document.getElementById('magicBtn');
+    const overlay = document.getElementById('overlay');
+    const typed = document.getElementById('typedMessage');
+    const goldBadge = document.getElementById('goldBadge');
+    const closeBtn = document.getElementById('closeBtn');
+    const replayBtn = document.getElementById('replayBtn');
+    const screenshotTip = document.getElementById('screenshotTip');
+    const confCanvas = document.getElementById('confettiCanvas');
+    const fireCanvas = document.getElementById('fireCanvas');
+    const balloonsContainer = document.getElementById('balloonsContainer');
+
+    let audioCtx = null;
+    let confettiRAF = null;
+    let fireRAF = null;
+    let balloonInterval = null;
+
+    // mobile-friendly canvas sizing (devicePixelRatio aware)
+    function fitCanvas(canvas){
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = Math.max(1, Math.floor(rect.width * dpr));
+      canvas.height = Math.max(1, Math.floor(rect.height * dpr));
+      canvas.style.width = rect.width + 'px';
+      canvas.style.height = rect.height + 'px';
+      const ctx = canvas.getContext('2d');
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    // show overlay and start spectacle
+    magicBtn.addEventListener('click', () => {
+      overlay.style.display = 'flex';
+      overlay.setAttribute('aria-hidden','false');
+
+      // small visual entrance
+      const card = overlay.querySelector('.surp-card');
+      card.style.transform = 'scale(.92)';
+      card.style.opacity = '0';
+      setTimeout(()=>{ card.style.transition = 'transform 380ms cubic-bezier(.2,.9,.18,1), opacity 320ms'; card.style.transform = 'scale(1)'; card.style.opacity = '1'; }, 16);
+
+      // allow paint then start
+      setTimeout(()=> {
+        animateBadge();
+        runTypedMessages();
+        spawnBalloons();
+        startConfetti(confCanvas);
+        startFireworks(fireCanvas);
+        playAudioAndBeat();
+      }, 90);
+    });
+
+    // close and replay handlers
+    closeBtn.addEventListener('click', hideAll);
+    replayBtn.addEventListener('click', ()=> {
+      stopAll();
+      setTimeout(()=> {
+        animateBadge();
+        runTypedMessages();
+        spawnBalloons();
+        startConfetti(confCanvas);
+        startFireworks(fireCanvas);
+        playAudioAndBeat();
+      }, 160);
+    });
+    screenshotTip.addEventListener('click', ()=> {
+      alert('Tip: Use your phone screenshot (Power+Volume Down or iOS side+volume up) or press "Replay Surprise" to capture again.');
+    });
+
+    function hideAll(){
+      overlay.style.display = 'none';
+      overlay.setAttribute('aria-hidden','true');
+      stopAll();
+      typed.textContent = '';
+    }
+
+    function stopAll(){
+      stopConfetti(); stopFireworks(); stopBalloons(); stopAudio();
+    }
+
+    // ---------- TYPED MESSAGES ----------
+    function runTypedMessages(){
+      const msgs = [
+        "Provisional allotment confirmed — your dream is one step closer! ✨",
+        "GOVERNMENT MEDICAL COLLEGE welcomes you — celebrate this moment!",
+        "So proud of your hard work. Bright days ahead ❤️"
+      ];
+      typed.textContent = '';
+      let i = 0;
+      function next(){
+        if(i >= msgs.length) return;
+        typeText(msgs[i], typed, 28, ()=>{ i++; setTimeout(next, 700); });
+      }
+      next();
+    }
+    function typeText(txt, el, speed=30, done){
+      el.textContent = '';
+      let idx = 0;
+      const t = setInterval(()=> {
+        el.textContent += txt.charAt(idx) || '';
+        idx++;
+        if(idx > txt.length){ clearInterval(t); if(done) done(); }
+      }, speed);
+    }
+
+    // ---------- GOLD BADGE ----------
+    function animateBadge(){
+      goldBadge.style.opacity = '0';
+      goldBadge.style.transform = 'translateY(18px) scale(.9)';
+      setTimeout(()=> {
+        goldBadge.style.transition = 'transform 680ms cubic-bezier(.2,.9,.18,1), opacity 420ms';
+        goldBadge.style.transform = 'translateY(0) scale(1)';
+        goldBadge.style.opacity = '1';
+        goldBadge.animate([{transform:'scale(1)'},{transform:'scale(1.06)'},{transform:'scale(1)'}],{duration:1200,iterations:Infinity});
+      },20);
+    }
+
+    // ---------- BALLOONS ----------
+    function spawnBalloons(){
+      stopBalloons();
+      const colors = ['#FF6B8A','#7CE3E1','#FFD166','#A7F3D0','#BDA0FF','#FFCF86'];
+      for(let i=0;i<6;i++){
+        const left = 8 + i * 14 + Math.random()*6;
+        createBalloon(colors[i%colors.length], left);
+      }
+      balloonInterval = setInterval(()=> createBalloon(colors[Math.floor(Math.random()*colors.length)], 6 + Math.random()*88 ), 900);
+    }
+    function createBalloon(color, leftPercent){
+      const b = document.createElement('div');
+      b.className = 'balloon';
+      const w = 46 + Math.random()*38;
+      const h = 66 + Math.random()*36;
+      b.style.width = w + 'px';
+      b.style.height = h + 'px';
+      b.style.left = leftPercent + '%';
+      b.style.background = color;
+      b.style.bottom = '-220px';
+      const s = document.createElement('div'); s.className = 'string';
+      b.appendChild(s);
+      balloonsContainer.appendChild(b);
+      const dur = 5000 + Math.random()*3000;
+      b.animate([{transform:'translateY(0)', opacity:0},{transform:`translateY(-${window.innerHeight + 240}px)`, opacity:1}], {duration:dur, easing:'cubic-bezier(.2,.9,.18,1)'});
+      setTimeout(()=> { if(b.parentNode) b.parentNode.removeChild(b); }, dur + 200);
+    }
+    function stopBalloons(){ if(balloonInterval) clearInterval(balloonInterval); balloonInterval = null; balloonsContainer.innerHTML = ''; }
+
+    // ---------- CONFETTI ----------
+    function startConfetti(canvas){
+      stopConfetti();
+      fitCanvas(canvas);
+      const ctx = canvas.getContext('2d');
+      const colors = ['#ff3b30','#ff9500','#ffd300','#34c759','#0a84ff','#7b61ff','#ff66aa'];
+      let pieces = [];
+      function spawn(n){
+        for(let i=0;i<n;i++){
+          pieces.push({
+            x: Math.random()*canvas.width,
+            y: Math.random()*canvas.height - canvas.height,
+            vx: (Math.random()-0.5)*8,
+            vy: 2 + Math.random()*6,
+            size: 6 + Math.random()*12,
+            color: colors[Math.floor(Math.random()*colors.length)],
+            rot: Math.random()*360,
+            drot: (Math.random()-0.5)*12
+          });
+        }
+      }
+      spawn(160);
+      function frame(){
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        for(let i=pieces.length-1;i>=0;i--){
+          const p = pieces[i];
+          p.vy += 0.25;
+          p.x += p.vx; p.y += p.vy; p.rot += p.drot;
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rot * Math.PI/180);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size*0.6);
+          ctx.restore();
+          if(p.y > canvas.height + 40) pieces.splice(i,1);
+        }
+        if(pieces.length < 120) spawn(80);
+        confettiRAF = requestAnimationFrame(frame);
+      }
+      frame();
+      window.addEventListener('resize', ()=> fitCanvas(canvas));
+    }
+    function stopConfetti(){ if(confettiRAF) cancelAnimationFrame(confettiRAF); try{ const ctx = confCanvas.getContext('2d'); ctx.clearRect(0,0,confCanvas.width, confCanvas.height); }catch(e){} }
+
+    // ---------- FIREWORKS ----------
+    function startFireworks(canvas){
+      stopFireworks();
+      fitCanvas(canvas);
+      const ctx = canvas.getContext('2d');
+      let particles = [];
+      function explode(cx, cy){
+        const hue = Math.floor(Math.random()*360);
+        const count = 70 + Math.floor(Math.random()*70);
+        for(let i=0;i<count;i++){
+          const angle = Math.random()*Math.PI*2;
+          const speed = 2 + Math.random()*6;
+          particles.push({
+            x: cx, y: cy,
+            vx: Math.cos(angle)*speed,
+            vy: Math.sin(angle)*speed,
+            r: 1 + Math.random()*3,
+            life: 40 + Math.random()*40,
+            hue
+          });
+        }
+      }
+      explode(canvas.width*0.4, canvas.height*0.32);
+      explode(canvas.width*0.7, canvas.height*0.22);
+      function frame(){
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        if(Math.random() < 0.02) explode(Math.random()*canvas.width, Math.random()*canvas.height*0.45);
+        for(let i=particles.length-1;i>=0;i--){
+          const p = particles[i];
+          p.vy += 0.04;
+          p.x += p.vx; p.y += p.vy; p.life--;
+          ctx.beginPath();
+          const alpha = Math.max(0, p.life / 80);
+          ctx.fillStyle = `hsla(${p.hue}, 85%, 55%, ${alpha})`;
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+          ctx.fill();
+          if(p.life <= 0) particles.splice(i,1);
+        }
+        fireRAF = requestAnimationFrame(frame);
+      }
+      frame();
+      window.addEventListener('resize', ()=> fitCanvas(canvas));
+    }
+    function stopFireworks(){ if(fireRAF) cancelAnimationFrame(fireRAF); try{ const ctx = fireCanvas.getContext('2d'); ctx.clearRect(0,0,fireCanvas.width, fireCanvas.height); }catch(e){} }
+
+    // ---------- AUDIO (short celebratory) ----------
+    function playAudioAndBeat(){
+      try{
+        if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const now = audioCtx.currentTime;
+        const notes = [523.25, 659.25, 783.99, 1046.5]; // C major-ish
+        notes.forEach((freq,i)=>{
+          const o = audioCtx.createOscillator();
+          const g = audioCtx.createGain();
+          o.type = 'sine'; o.frequency.value = freq;
+          g.gain.value = 0.0001;
+          o.connect(g); g.connect(audioCtx.destination);
+          const t0 = now + i*0.14;
+          o.start(t0);
+          g.gain.exponentialRampToValueAtTime(0.28, t0 + 0.02);
+          g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.18);
+          o.stop(t0 + 0.22);
+        });
+        // gentle pad
+        const pad = audioCtx.createOscillator();
+        const gPad = audioCtx.createGain();
+        pad.type = 'triangle'; pad.frequency.value = 130.81;
+        gPad.gain.value = 0.0001; pad.connect(gPad); gPad.connect(audioCtx.destination);
+        pad.start(now + 0.04); gPad.gain.exponentialRampToValueAtTime(0.06, now + 0.12); gPad.gain.exponentialRampToValueAtTime(0.0001, now + 3.6); pad.stop(now + 3.6);
+        // soft swell/kick
+        const bufferSize = audioCtx.sampleRate * 0.22;
+        const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        const data = noiseBuffer.getChannelData(0);
+        for(let i=0;i<bufferSize;i++){ data[i] = (Math.random()*2-1) * Math.exp(-i/(audioCtx.sampleRate*0.06)); }
+        const noise = audioCtx.createBufferSource(); noise.buffer = noiseBuffer;
+        const gNoise = audioCtx.createGain(); gNoise.gain.value = 0.0001;
+        noise.connect(gNoise); gNoise.connect(audioCtx.destination);
+        noise.start(now + 0.06); gNoise.gain.exponentialRampToValueAtTime(0.12, now + 0.07); gNoise.gain.exponentialRampToValueAtTime(0.0001, now + 0.28);
+      }catch(e){
+        console.warn('Audio blocked or not supported', e && e.message);
+      }
+    }
+    function stopAudio(){ try{ if(audioCtx){ audioCtx.close(); audioCtx = null; } }catch(e){} }
+
+    // ---------- utilities ----------
+    function fitCanvas(canvas){
+      try{
+        const rect = canvas.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        canvas.width = Math.max(1, Math.floor(rect.width * dpr));
+        canvas.height = Math.max(1, Math.floor(rect.height * dpr));
+        canvas.style.width = rect.width + 'px';
+        canvas.style.height = rect.height + 'px';
+        const ctx = canvas.getContext('2d');
+        ctx.setTransform(dpr,0,0,dpr,0,0);
+      }catch(e){}
+    }
+
+    // ---------- cleanup ----------
+    function stopConfetti(){ if(confettiRAF) cancelAnimationFrame(confettiRAF); try{ const ctx = confCanvas.getContext('2d'); ctx.clearRect(0,0,confCanvas.width, confCanvas.height); }catch(e){} }
+    function stopFireworks(){ if(fireRAF) cancelAnimationFrame(fireRAF); try{ const ctx = fireCanvas.getContext('2d'); ctx.clearRect(0,0,fireCanvas.width, fireCanvas.height); }catch(e){} }
+    function stopBalloons(){ if(balloonInterval) clearInterval(balloonInterval); balloonInterval = null; balloonsContainer.innerHTML = ''; }
+
+    window.addEventListener('beforeunload', ()=> { stopConfetti(); stopFireworks(); stopBalloons(); stopAudio(); });
+
+  })();
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
